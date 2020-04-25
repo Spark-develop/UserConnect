@@ -221,7 +221,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget buildList(BuildContext context, User uuser) {
     return Container(
       height: 300,
-      padding: EdgeInsets.only(left: 10, right: 10),
+      padding: EdgeInsets.only(top:20,left: 10, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         color: Color(0xfff0f0f0),

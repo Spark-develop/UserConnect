@@ -15,16 +15,12 @@
       },
       "oauth_client": [
         {
-          "client_id": "201234087677-559ln9ugjaebk0leollenspqktqvv6md.apps.googleusercontent.com",
+          "client_id": "201234087677-m7tiipmbvvu8u5mm67p8jt84qr4oer32.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.finalLetsConnect",
             "certificate_hash": "2278e0e8430b51de9a895a30dff22e4c06432af8"
           }
-        },
-        {
-          "client_id": "201234087677-0am1lvden6uf440tlt4giiqh8sg3ni95.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -34,12 +30,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "201234087677-0am1lvden6uf440tlt4giiqh8sg3ni95.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

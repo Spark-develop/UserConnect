@@ -1,8 +1,8 @@
 const List<String> adv =[
-    'https://firebasestorage.googleapis.com/v0/b/otpauth-1-d.appspot.com/o/PC.png?alt=media&token=a1189ecb-e424-4f19-8fcf-473e4e3bb8b1',
-    'https://firebasestorage.googleapis.com/v0/b/otpauth-1-d.appspot.com/o/accPage.png?alt=media&token=11a442d0-eb3b-4ec2-ac5d-2dca6a723d57',
-    'https://firebasestorage.googleapis.com/v0/b/otpauth-1-d.appspot.com/o/bio.png?alt=media&token=9100ffd3-c73a-4aef-8788-1dae3028df58',
-     'https://firebasestorage.googleapis.com/v0/b/otpauth-1-d.appspot.com/o/cctv.png?alt=media&token=5cd5f55b-0f4a-4752-a16c-3200176cbfa0',
+    'http://hd.wallpaperswide.com/thumbs/simply_ad_-t2.jpg',
+    'http://hd.wallpaperswide.com/thumbs/simply_ad_-t2.jpg',
+    'http://hd.wallpaperswide.com/thumbs/simply_ad_-t2.jpg',
+    'http://hd.wallpaperswide.com/thumbs/simply_ad_-t2.jpg',
      ];
 
 const List<String> all= [

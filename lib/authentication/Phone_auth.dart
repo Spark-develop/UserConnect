@@ -303,7 +303,7 @@ class _PhoneAuth extends State<Phone_auth> {
       child: Container(
         color: Colors.transparent,
         padding: EdgeInsets.all(12.0),
-        child: CircleAvatar(child: Icon(Icons.arrow_back_ios,color:lightblue,),backgroundColor:Colors.transparent,),
+        child: CircleAvatar(child: Icon(Icons.arrow_back_ios,color:lightWhite,),backgroundColor:Colors.transparent,),
       ),
     );
   }

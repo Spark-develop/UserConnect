@@ -65,6 +65,7 @@ class AuthService {
   }
 
   Future signInWithGoogle() async {
+    scopes:[''];
     try {
       GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =

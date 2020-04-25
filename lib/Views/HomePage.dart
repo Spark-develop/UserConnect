@@ -1,6 +1,6 @@
 import 'package:finalLetsConnect/Views/Accesories.dart';
 import 'package:finalLetsConnect/Views/formPage.dart';
-import 'package:finalLetsConnect/Views/servicePage.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:finalLetsConnect/Views/settingsPage.dart';
 import 'package:finalLetsConnect/styles/appImages.dart';
 import 'package:finalLetsConnect/styles/network_image.dart';
@@ -89,14 +89,15 @@ onGridTapped(BuildContext context, int index) {
         builder: (BuildContext context) => grid_tab[index],
       ));
 }
-List<TextEditingController> editCtrl=[];
+
+List<TextEditingController> editCtrl = [];
 final grid_tab = [
-  FormPage(subject:"Monitor"),
-  FormPage(subject:"Wires and Cables"),
-  FormPage(subject:"Keyboard"),
-  FormPage(subject:"RAM,ROM or Motherboard"),
-  FormPage(subject:"Router"),
-  FormPage(subject:"Printer"),
+  FormPage(subject: "Monitor"),
+  FormPage(subject: "Wires and Cables"),
+  FormPage(subject: "Keyboard"),
+  FormPage(subject: "RAM,ROM or Motherboard"),
+  FormPage(subject: "Router"),
+  FormPage(subject: "Printer"),
 ];
 
 Widget categorygrid(BuildContext context) {
@@ -173,78 +174,33 @@ Widget homeWidget(BuildContext context) {
 }
 
 Widget homeUserIntro(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 20),
-    child: Column(
-      children: <Widget>[
-        Container(
-            padding: EdgeInsets.only(top: 8),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  decoration: new BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 8.0,
-                          spreadRadius: 0.1,
-                          offset: Offset(0, 12))
-                    ],
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: lightWhite,
-                  ),
-                  padding: EdgeInsets.only(right: 7, left: 7),
-                  height: MediaQuery.of(context).size.height / 3.5,
-                  width: MediaQuery.of(context).size.width,
-                  child: PageView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: adv.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4.0),
-                            child: PNetworkImage(
-                              adv[index],
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        );
-                      }),
-                ),
-              ],
-            ))
-        // Container(
-        //   child: Icon(
-        //     Icons.check,
-        //     size: 70,
-        //     color: lightWhite,
-        //   ),
-        //   alignment: Alignment.centerLeft,
-        // ),
-        // Container(
-        //   child: Text(
-        //     'Hello, User',
-        //     style: userIntroName,
-        //   ),
-        //   alignment: Alignment.centerLeft,
-        // ),
-        // Container(
-        //   child: Text(
-        //     'This is a user description area..',
-        //     style: userIntroDes,
-        //   ),
-        //   alignment: Alignment.centerLeft,
-        // ),
-        // Container(
-        //   child: Text(
-        //     'TIME :' + DateTime.now().toString(),
-        //     style: homePageTime,
-        //   ),
-        //   padding: EdgeInsets.only(top: 28),
-        //   alignment: Alignment.centerLeft,
-        // ),
-      ],
+  return Container(
+    height: 250,
+    color: Colors.transparent,
+    padding: EdgeInsets.only(top: 10.0, bottom: 16.0),
+    child: Swiper(
+      itemBuilder: (BuildContext context, int index) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: GestureDetector(
+            onTap:(){},
+            child: Padding(
+              padding: const EdgeInsets.only(right: 4.0, left: 4),
+              child: PNetworkImage(
+                adv[index],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
+      containerHeight: 100,
+      autoplay: true,
+      autoplayDelay: 10,
+      itemCount: 4,
+      viewportFraction: 0.8,
+      scale: 0.9,
+      pagination: SwiperPagination(),
     ),
   );
 }
