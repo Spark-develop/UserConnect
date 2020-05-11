@@ -19,7 +19,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePage extends State<MyHomePage> {
   int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -101,46 +100,46 @@ final grid_tab = [
 ];
 
 Widget categorygrid(BuildContext context) {
-  return GridView.builder(
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      mainAxisSpacing: 0.75,
-      crossAxisSpacing: 0,
-      crossAxisCount: 3,
-      childAspectRatio: 1,
-    ),
-    physics: ScrollPhysics(),
-    padding: EdgeInsets.all(8),
-    itemCount: 6,
-    scrollDirection: Axis.vertical,
-    shrinkWrap: true,
-    itemBuilder: (BuildContext context, int index) {
-      return GestureDetector(
-          onTap: () {
-            onGridTapped(context, index);
-          },
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(0),
-                  padding: const EdgeInsets.all(38.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+  return SafeArea(
+    child: GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisSpacing: 0.75,
+        crossAxisSpacing: 0,
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+      ),
+      physics: ScrollPhysics(),
+      padding: EdgeInsets.all(8),
+      itemCount: 6,
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+            onTap: () {
+              onGridTapped(context, index);
+            },
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    // height: MediaQuery.of(context).size.height,
+                    // width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(40.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: PNetworkImage(
+                      all[index],
+                      fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.height/14,
+                      width: MediaQuery.of(context).size.width/8.5,
+                    ),
                   ),
-                  child: Img(all[index]),
-                ),
-              ]));
-    },
-  );
-}
-
-Widget Img(String img) {
-  return PNetworkImage(
-    img,
-    fit: BoxFit.cover,
-    height: 50,
-    width: 50,
+                ]));
+      },
+    ),
   );
 }
 
@@ -175,28 +174,23 @@ Widget homeWidget(BuildContext context) {
 
 Widget homeUserIntro(BuildContext context) {
   return Container(
-    height: 250,
+    height: MediaQuery.of(context).size.height/3,
     color: Colors.transparent,
     padding: EdgeInsets.only(top: 10.0, bottom: 16.0),
     child: Swiper(
       itemBuilder: (BuildContext context, int index) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
-          child: GestureDetector(
-            onTap:(){},
-            child: Padding(
-              padding: const EdgeInsets.only(right: 4.0, left: 4),
-              child: PNetworkImage(
-                adv[index],
-                fit: BoxFit.cover,
-              ),
+          child: Container(
+            color: Colors.black,
+            child: PNetworkImage(
+              "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg",
+              fit: BoxFit.fill,
             ),
           ),
         );
       },
       containerHeight: 100,
-      autoplay: true,
-      autoplayDelay: 10,
       itemCount: 4,
       viewportFraction: 0.8,
       scale: 0.9,

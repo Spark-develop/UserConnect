@@ -17,17 +17,17 @@ class _ServicePage extends State<Service> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: lightWhite,
-          elevation: 0,
-          leading: MyButton(context),
-        ),
+        backgroundColor: lightWhite,
+        elevation: 0,
+        leading: MyButton(context),
+      ),
       body: Container(
         color: lightWhite,
         // padding: EdgeInsets.only(left:30,right: 30),
         child: GridView.count(
-          physics: NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            padding: EdgeInsets.only(bottom:20,right: 20,left:20),
+            padding: EdgeInsets.only(bottom: 20, right: 20, left: 20),
             children: <Widget>[
               card(context, 1),
               card(context, 2),
@@ -41,15 +41,21 @@ class _ServicePage extends State<Service> with TickerProviderStateMixin {
   }
 }
 
-  Widget MyButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: CircleAvatar(child: Icon(Icons.arrow_back_ios,color:lightblue,),backgroundColor:Colors.transparent,),
-      
-    );
-  }
+Widget MyButton(BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.pop(context);
+    },
+    child: CircleAvatar(
+      child: Icon(
+        Icons.arrow_back_ios,
+        color: lightblue,
+      ),
+      backgroundColor: Colors.transparent,
+    ),
+  );
+}
+
 Widget card(
   BuildContext context,
   int tab,
@@ -93,12 +99,16 @@ Widget card(
       enableFeedback: true,
       onTap: () {
         print(tab);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>FormPage(),));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormPage(),
+            ));
       },
       child: Container(
           //  color: _bgcolor,
-          margin: EdgeInsets.only(right: 20, left: 10, top: 20),
-          // padding: EdgeInsets.all(10),
+          margin: EdgeInsets.all(10),
+          // padding: EdgeInsets.all(20),
           decoration: new BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -116,7 +126,8 @@ Widget card(
                       fit: BoxFit.fill,
                       alignment: Alignment.topCenter,
                     ),
-                    height: 80),
+                    height: MediaQuery.of(context).size.height / 8,
+                    width: MediaQuery.of(context).size.width / 5),
                 Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
@@ -130,17 +141,22 @@ Widget card(
     return InkResponse(
       enableFeedback: true,
       onTap: () {
-        if(FirebaseAuth.instance.currentUser() ==null){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Phone_auth()));
-        }
-        else{
-        print(tab);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>FormPage(),));
+        if (FirebaseAuth.instance.currentUser() == null) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Phone_auth()));
+        } else {
+          print(tab);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FormPage(),
+              ));
         }
       },
       child: Container(
-          margin: EdgeInsets.only(right: 10, left: 20, top: 20),
-          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.all(10),
+          // padding: EdgeInsets.all(20),
+          height: MediaQuery.of(context).size.height / 8,
           decoration: new BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -158,7 +174,8 @@ Widget card(
                       fit: BoxFit.fill,
                       alignment: Alignment.topCenter,
                     ),
-                    height: 80),
+                    height: MediaQuery.of(context).size.height / 8,
+                    width: MediaQuery.of(context).size.width / 5),
                 Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
@@ -170,63 +187,3 @@ Widget card(
     );
   }
 }
-
-// Widget cardHolder(BuildContext context) {
-//   return Column(
-//     children: <Widget>[
-//       Expanded(
-//         child: TabBarView(children: <Widget>[
-//           Container(
-//               margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-//               padding: EdgeInsets.all(20),
-//               width: 200,
-//               decoration: new BoxDecoration(
-//                 boxShadow: [
-//                   BoxShadow(
-//                       color: Colors.black26,
-//                       blurRadius: 8.0,
-//                       spreadRadius: 0.1,
-//                       offset: Offset(0, 12))
-//                 ],
-//                 borderRadius: BorderRadius.all(Radius.circular(8)),
-//                 color: lightWhite,
-//               ),
-//               child: Text(' dgd ')),
-//           Container(
-//               margin: EdgeInsets.only(left: 20, bottom: 20),
-//               padding: EdgeInsets.all(20),
-//               width: 200,
-//               decoration: new BoxDecoration(
-//                 boxShadow: [
-//                   BoxShadow(
-//                       color: Colors.black26,
-//                       blurRadius: 8.0,
-//                       spreadRadius: 0.1,
-//                       offset: Offset(0, 12))
-//                 ],
-//                 borderRadius: BorderRadius.all(Radius.circular(8)),
-//                 color: lightWhite,
-//               ),
-//               child: Text('  ')),
-//           Container(
-//               margin: EdgeInsets.only(left: 20, bottom: 20),
-//               padding: EdgeInsets.all(20),
-//               width: 200,
-//               decoration: new BoxDecoration(
-//                 boxShadow: [
-//                   BoxShadow(
-//                       color: Colors.black26,
-//                       blurRadius: 8.0,
-//                       spreadRadius: 0.1,
-//                       offset: Offset(0, 12))
-//                 ],
-//                 borderRadius: BorderRadius.all(Radius.circular(8)),
-//                 color: lightWhite,
-//               ),
-//               child: Text('  '))
-//         ]),
-//       ),
-//       // serviceMainArea(context)
-//     ],
-//   );
-// }
