@@ -7,7 +7,7 @@ import 'package:finalLetsConnect/styles/network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:finalLetsConnect/Views/assets.dart';
-import 'package:finalLetsConnect/Views/wallet.dart';
+import 'package:finalLetsConnect/Views/walletPage.dart';
 import 'package:finalLetsConnect/Views/callHistoryPage.dart';
 import 'package:finalLetsConnect/styles/appColors.dart';
 import 'package:finalLetsConnect/styles/apptext.dart';
@@ -121,23 +121,38 @@ Widget categorygrid(BuildContext context) {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
+                
                   Container(
-                    // height: MediaQuery.of(context).size.height,
-                    // width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.height*.16,
+                    // width: MediaQuery.of(context).size.width*.28,
                     margin: EdgeInsets.all(0),
-                    padding: const EdgeInsets.all(40.0),
+                    padding: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: PNetworkImage(
-                      all[index],
-                      fit: BoxFit.cover,
-                      height: MediaQuery.of(context).size.height/14,
-                      width: MediaQuery.of(context).size.width/8.5,
-                    ),
+                     all[index],
+                     fit: BoxFit.cover,
+                       height: MediaQuery.of(context).size.height*.12,
+                    width: MediaQuery.of(context).size.width*.20,
+                      ),
                   ),
                 ]));
+                //   Container(
+                //     // height: ,
+                //     margin: EdgeInsets.all(0),
+                //     padding: const EdgeInsets.all(20.0),
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       borderRadius: BorderRadius.circular(12),
+                //     ),
+                //     child: PNetworkImage(
+                //       all[index],
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                // ]));
       },
     ),
   );
