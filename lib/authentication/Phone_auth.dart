@@ -38,6 +38,57 @@ class _PhoneAuth extends State<Phone_auth> {
   String PhoneNumber, smsCode;
   static var _authcred;
   bool _isLoading = false;
+  bool dialog = false;
+
+  Future<bool> smsCodeDialog(BuildContext context) {
+    setState(() {
+      dialog = true;
+    });
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Enter Code"),
+            content: TextField(
+              onChanged: (value) {
+                this.smsCode = value;
+              },
+            ),
+            contentPadding: EdgeInsets.all(10.0),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Verify"),
+                onPressed: () {
+                  UserDetail.mob = PhoneNumber;
+                  UserDetail.email = null;
+                  FirebaseAuth.instance.currentUser().then((user) {
+                    if (user != null) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacementNamed('/homepage');
+                    } else {
+                      Navigator.of(context).pop();
+                      signInWithPhoneNumber(smsCode);
+                    }
+                  });
+                },
+              )
+            ],
+          );
+        }).then((_) {
+      if (mounted) {
+        setState(() {
+          dialog = false; // dialog was closed
+        });
+      }
+    });
+
+    new Future.delayed(const Duration(seconds: 5), () {
+      // When task is over, close the dialog
+      Navigator.of(context, rootNavigator: true).pop();
+    });
+  }
 
   void signInWithPhoneNumber(String smsCode) async {
     _authcred = PhoneAuthProvider.getCredential(
@@ -155,7 +206,7 @@ class _PhoneAuth extends State<Phone_auth> {
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Dont have an Account? ',
+              text: 'Don\'t have an Account?  ',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
@@ -250,51 +301,16 @@ class _PhoneAuth extends State<Phone_auth> {
     );
   }
 
-  Future<bool> smsCodeDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Enter Code"),
-            content: TextField(
-              onChanged: (value) {
-                this.smsCode = value;
-              },
-            ),
-            contentPadding: EdgeInsets.all(10.0),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("Verify"),
-                onPressed: () {
-                  UserDetail.mob = PhoneNumber;
-                  UserDetail.email = null;
-                  FirebaseAuth.instance.currentUser().then((user) {
-                    if (user != null) {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacementNamed('/homepage');
-                    } else {
-                      Navigator.of(context).pop();
-                      signInWithPhoneNumber(smsCode);
-                    }
-                  });
-                },
-              )
-            ],
-          );
-        });
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildPageContent(context),
       appBar: AppBar(
-        backgroundColor: Color(0xFF73AEF5),
-        elevation: 0,
-        leading: MyButton(context)
-      ),
+          backgroundColor: Color(0xFF73AEF5),
+          elevation: 0,
+          leading: MyButton(context)),
     );
   }
+
   Widget MyButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -303,9 +319,14 @@ class _PhoneAuth extends State<Phone_auth> {
       child: Container(
         color: Colors.transparent,
         padding: EdgeInsets.all(12.0),
-        child: CircleAvatar(child: Icon(Icons.arrow_back_ios,color:lightWhite,),backgroundColor:Colors.transparent,),
+        child: CircleAvatar(
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: lightWhite,
+          ),
+          backgroundColor: Colors.transparent,
+        ),
       ),
     );
   }
 }
-

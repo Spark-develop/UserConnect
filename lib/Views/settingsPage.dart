@@ -1,9 +1,10 @@
 import 'dart:io';
+import 'package:finalLetsConnect/authentication/authservices.dart';
 import 'package:finalLetsConnect/authentication/test.dart';
 import 'package:finalLetsConnect/authentication/users.dart';
 import 'package:finalLetsConnect/styles/appColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:finalLetsConnect/styles/apptext.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,41 +17,36 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final _email1 = TextEditingController();
+  final _username1 = TextEditingController();
+  final _address1 = TextEditingController();
+  final _mobile1 = TextEditingController();
+  final _formEmailKey = GlobalKey<FormState>();
+  static String email, mobile, username, address;
+  bool _emailSet = false,
+      _mobileSet = false,
+      _usernameSet = false,
+      _addressSet = false;
   static File _image;
-  String textEdit;
-
   StorageTaskSnapshot taskSnapshot;
   final databaseReference = Firestore.instance;
-  final List<Map> setList = [
-    {
-      "Logo": Icons.mail,
-      "type": UserDetail.email == null ? "Email" : UserDetail.email,
-      "text_type": TextInputType.emailAddress,
-      "Form": GlobalKey<FormState>(),
-      "boolText": false,
-    },
-    {
-      "Logo": Icons.person_outline,
-      "type": "User Name",
-      "text_type": TextInputType.text,
-      "Form": GlobalKey<FormState>(),
-      "boolText": false
-    },
-    {
-      "Logo": Icons.phone,
-      "type": UserDetail.mob == null ? "Number" : UserDetail.mob,
-      "text_type": TextInputType.phone,
-      "Form": GlobalKey<FormState>(),
-      "boolText": false
-    },
-    {
-      "Logo": Icons.my_location,
-      "type": UserDetail.address ==null? "Address" :UserDetail.address,
-      "text_type": TextInputType.text,
-      "Form": GlobalKey<FormState>(),
-      "boolText": false
-    },
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    Firestore.instance
+        .collection("users")
+        .document(UserDetail.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        email = value.data['Email'].toString();
+        username = value.data['Username'].toString();
+        mobile = value.data['Mobile'].toString();
+        address = value.data['Address'].toString();
+      });
+    });
+  }
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -67,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
     StorageUploadTask uploadtask = firebaseStorage.putFile(_image);
     taskSnapshot = await uploadtask.onComplete;
     final imageUrl = await firebaseStorage.getDownloadURL();
-    await databaseReference.collection("users").document(userOne).setData({
+    await databaseReference.collection("users").document(userOne).updateData({
       'ProfilePic': imageUrl,
     });
     setState(() {
@@ -79,13 +75,36 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget build(BuildContext context) {
+    final AuthService _authService = AuthService();
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+          'Settings',
+          style: mainTitle,
+        ),
+        backgroundColor: lightblue,
+        elevation: 0,
+        // leading:,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () async {
+              _authService.signOut();
+            },
+            child: Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10, right: 15),
+              child: Icon(
+                Icons.power_settings_new,
+              ),
+            ),
+          ),
+        ],
+        iconTheme: IconThemeData(color: lightWhite),
+      ),
       body: Container(
-        child: Expanded(
-                  child: ListView(
-            children: <Widget>[
-              setPage(context)
-            ],
+        child: SafeArea(
+          child: ListView(
+            children: <Widget>[setPage(context)],
           ),
         ),
         padding: EdgeInsets.only(bottom: 0),
@@ -192,10 +211,14 @@ class _SettingsPageState extends State<SettingsPage> {
               : uploadPic(context, userer);
         },
         backgroundColor: Color(0xfff0f0f0),
-        label: Text(
-          "SAVE",
-          style: TextStyle(color: lightblue),
-        ),
+        label: Text("SAVE PROFILE PIC",
+            style: TextStyle(
+                fontFamily: "Open Sans",
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: lightblue,
+                letterSpacing: -1.5,
+                wordSpacing: 2.0)),
       ),
     );
   }
@@ -206,8 +229,14 @@ class _SettingsPageState extends State<SettingsPage> {
       child: FloatingActionButton.extended(
         backgroundColor: Color(0xfff0f0f0),
         label: Text(
-          "CANCEL",
-          style: TextStyle(color: lightblue),
+          "REMOVE",
+          style: TextStyle(
+              fontFamily: "Open Sans",
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: lightblue,
+              letterSpacing: -1.5,
+              wordSpacing: 2.0),
         ),
         onPressed: () {
           setState(() {
@@ -220,71 +249,332 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget buildList(BuildContext context, User uuser) {
     return Container(
-      height: 300,
-      padding: EdgeInsets.only(top:20,left: 10, right: 10),
+      height: MediaQuery.of(context).size.height / 2.1,
+      padding: EdgeInsets.only(top: 10, left: 10, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         color: Color(0xfff0f0f0),
       ),
-      margin: EdgeInsets.only(bottom: 1),
-      child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: setList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return buildCard(context, index, uuser);
-          }),
+      child: buildCard(context),
     );
   }
 
-  Widget buildCard(BuildContext context, int index, User uuser) {
-    return Card(
-      elevation: 0,
-      color: Color(0xfff0f0f0),
-      child: Form(
-        key: setList[index]['Form'],
-        child: ListTile(
-          leading: Icon(setList[index]['Logo']),
-          title: setList[index]['boolText'] == true
-              ? TextFormField(
-                  validator: (val) => val.isEmpty ? "input empty" : null,
-                  onChanged: (val) =>
-                      setState(() => setList[index]["type"] = val),
-                  keyboardType: setList[index]['text_type'],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Open Sans',
-                  ),
-                )
-              : Text(
-                  setList[index]['type'],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Open Sans',
-                  ),
-                ),
-          trailing: GestureDetector(
-              onTap: () {
-                setState(() {
-                  setList[index]['Logo'] == Icons.my_location
-                      ? UserDetail.address = setList[index]['type']
-                      : null;
-                  setList[index]['boolText'] = !setList[index]['boolText'];
-                });
-                var n = setList.length;
-
-                for (int i = 0; i < n; i++) {
-                  if (i != index) {
-                    if (setList[i]['boolText'] == true) {
-                      setList[i]['boolText'] = !setList[i]['boolText'];
-                    }
-                  }
+  Widget buildCard(BuildContext context) {
+    return Form(
+      key: _formEmailKey,
+      child: Column(
+        children: [
+          //_emailSet
+          Card(
+            elevation: 0,
+            color: Color(0xfff0f0f0),
+            child: ListTile(
+              leading: Icon(Icons.email),
+              title: _emailSet == true
+                  ? UserDetail.email != null
+                      ? TextFormField(
+                          controller: _email1,
+                          autofocus: false,
+                          validator: (_email1) {
+                            if (_email1.length == 0) {
+                              return "Model can't be Empty";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          style: TextStyle(
+                              fontFamily: "Open Sans",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              letterSpacing: -1.5,
+                              wordSpacing: 2.0))
+                      : Text(UserDetail.email,
+                          style: TextStyle(
+                              fontFamily: "Open Sans",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              letterSpacing: -1.5,
+                              wordSpacing: 2.0))
+                  : Text(
+                      UserDetail.email == "null" ||
+                              UserDetail.email == null ||
+                              UserDetail.email == ""
+                          ? email == "" || email == "null" || email == null
+                              ? "Email"
+                              : email
+                          : UserDetail.email,
+                      style: TextStyle(
+                          fontFamily: "Open Sans",
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                          letterSpacing: -1.5,
+                          wordSpacing: 2.0)),
+              trailing: UserDetail.email == "" || UserDetail.email == null
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _emailSet = true;
+                        });
+                      },
+                      child: _emailSet == false
+                          ? Icon(Icons.edit, size: 28)
+                          : Icon(Icons.save, size: 28),
+                    )
+                  : Container(
+                      width: 10,
+                    ),
+            ),
+          ),
+          Card(
+            elevation: 0,
+            color: Color(0xfff0f0f0),
+            child: ListTile(
+              leading: Icon(Icons.person),
+              title: _usernameSet == true
+                  ? TextFormField(
+                      controller: _username1,
+                      autofocus: false,
+                      validator: (_username1) {
+                        if (_username1.length == 0) {
+                          return "Model can't be Empty";
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.text,
+                      style: TextStyle(
+                          fontFamily: "Open Sans",
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                          letterSpacing: -1.5,
+                          wordSpacing: 2.0))
+                  : Text(
+                      username == "" || username == "null" || username == null
+                          ? "Username"
+                          : username,
+                      style: TextStyle(
+                          fontFamily: "Open Sans",
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                          letterSpacing: -1.5,
+                          wordSpacing: 2.0)),
+              trailing: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _usernameSet = true;
+                  });
+                },
+                child: _usernameSet == false
+                    ? Icon(Icons.edit, size: 28)
+                    : Icon(Icons.save, size: 28),
+              ),
+            ),
+          ),
+          Card(
+            elevation: 0,
+            color: Color(0xfff0f0f0),
+            child: ListTile(
+              leading: Icon(Icons.phone),
+              title: _mobileSet == true
+                  ? UserDetail.mob != null
+                      ? Text(UserDetail.mob,
+                          style: TextStyle(
+                              fontFamily: "Open Sans",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              letterSpacing: -1.5,
+                              wordSpacing: 2.0))
+                      : TextFormField(
+                          controller: _mobile1,
+                          autofocus: false,
+                          validator: (_mobile1) {
+                            if (_mobile1.length == 0) {
+                              return "Model can't be Empty";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(
+                              fontFamily: "Open Sans",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              letterSpacing: -1.5,
+                              wordSpacing: 2.0))
+                  : Text(
+                      UserDetail.mob == null ||
+                              UserDetail.mob == "null" ||
+                              UserDetail.mob == ""
+                          ? mobile == "" || mobile == "null" || mobile == null
+                              ? "Mobile"
+                              : mobile
+                          : UserDetail.mob,
+                      style: TextStyle(
+                          fontFamily: "Open Sans",
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                          letterSpacing: -1.5,
+                          wordSpacing: 2.0)),
+              trailing: UserDetail.mob != null
+                  ? Container(
+                      width: 10,
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _mobileSet = true;
+                        });
+                      },
+                      child: _mobileSet == false
+                          ? Icon(Icons.edit, size: 28)
+                          : Icon(Icons.save, size: 28),
+                    ),
+            ),
+          ),
+          Card(
+            elevation: 0,
+            color: Color(0xfff0f0f0),
+            child: ListTile(
+              leading: Icon(Icons.my_location),
+              title: _addressSet == true
+                  ? TextFormField(
+                      controller: _address1,
+                      autofocus: false,
+                      validator: (_address1) {
+                        if (_address1.length == 0) {
+                          return "Model can't be Empty";
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.multiline,
+                      style: TextStyle(
+                          fontFamily: "Open Sans",
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                          letterSpacing: -1.5,
+                          wordSpacing: 2.0))
+                  : Text(
+                      address == "" || address == "null" || address == null
+                          ? "Address"
+                          : address,
+                      style: TextStyle(
+                          fontFamily: "Open Sans",
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                          letterSpacing: -1.5,
+                          wordSpacing: 2.0)),
+              trailing: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _addressSet = true;
+                  });
+                },
+                child: _addressSet == false
+                    ? Icon(
+                        Icons.edit,
+                        size: 28,
+                      )
+                    : Icon(Icons.save, size: 28),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 30,
+          ),
+          FloatingActionButton.extended(
+            onPressed: () {
+              if (_formEmailKey.currentState.validate()) {
+                if (_email1.text != null ||
+                    _username1.text != null ||
+                    _mobile1.text != null ||
+                    _address1.text != null) {
+                  addcall(
+                    _email1.text,
+                    _username1.text,
+                    _mobile1.text,
+                    _address1.text,
+                    // smsCodeDialog(context);
+                  );
+                  setState(() {
+                    Firestore.instance
+                        .collection("users")
+                        .document(UserDetail.uid)
+                        .get()
+                        .then((value) {
+                      setState(() {
+                        email = value.data['Email'].toString() == "" ||
+                                value.data['Email'].toString() == "null" ||
+                                value.data['Email'].toString() == null
+                            ? "Email"
+                            : value.data['Email'].toString();
+                        username = value.data['Username'].toString() == "" ||
+                                value.data['Username'].toString() == "null" ||
+                                value.data['Username'].toString() == null
+                            ? "Username"
+                            : value.data['Username'].toString();
+                        mobile = value.data['Mobile'].toString() == "" ||
+                                value.data['Mobile'].toString() == "null" ||
+                                value.data['Mobile'].toString() == null
+                            ? "Mobile"
+                            : value.data['Mobile'].toString();
+                        address = value.data['Address'].toString() == "" ||
+                                value.data['Address'].toString() == "null" ||
+                                value.data['Address'].toString() == null
+                            ? "Address"
+                            : value.data['Address'].toString();
+                      });
+                    });
+                    _emailSet = false;
+                    _usernameSet = false;
+                    _mobileSet = false;
+                    _addressSet = false;
+                  });
                 }
-              },
-              child: setList[index]['boolText'] == false
-                  ? Icon(Icons.edit)
-                  : Icon(Icons.save)),
-        ),
+              }
+            },
+            backgroundColor: lightblue,
+            label: Text(
+              "SAVE PROFILE INFO",
+              style: TextStyle(
+                  fontFamily: "Open Sans",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                  letterSpacing: -1.5,
+                  wordSpacing: 2.0),
+            ),
+          )
+        ],
       ),
     );
+  }
+
+  void addcall(
+    String email,
+    String username,
+    String mobile,
+    String address,
+  ) async {
+    await databaseReference
+        .collection("users")
+        .document(UserDetail.uid)
+        .updateData({
+      'Email': email,
+      'Username': username,
+      'Mobile': mobile,
+      'Address': address,
+    });
   }
 }

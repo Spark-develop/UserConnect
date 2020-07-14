@@ -23,28 +23,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_map:
   flutter_sidekick:
+  firebase_database: any
+  scoped_model: any
   cloud_firestore:
   firebase_auth:
   google_sign_in:
   flutter_spinkit:
   flutter_custom_clippers:
-  auto_size_text:
   googleapis:
   image_picker: 
   firebase_storage:
-  firebase_core:
-  image_cropper:
+  firebase_core: 
   path:
-  google_fonts:
   cached_network_image: 
-  location:
-  nominatim_location_picker: 
-  firebase_messaging:
+  location: ^2.3.5
   provider:
   flutter_swiper:
-  # razorpay_flutter: 1.1.0
   webview_flutter: 
+  geocoder: ^0.2.1
   fluttertoast: ^4.0.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -83,6 +81,7 @@ flutter:
     - images/phone2.png
     - images/166256.svg
     - images/183410-200.png
+    - images/5589(1).jpg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

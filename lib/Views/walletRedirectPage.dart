@@ -13,35 +13,23 @@ class WalletRedirectPage extends StatefulWidget {
 class _WalletRedirectPageState extends State<WalletRedirectPage> {
   WebViewController _webcontroller;
   String _loadHTML() {
-    return '''
-<!DOCTYPE html><html>
-<head><title>Navigation Delegate Example</title></head>
-<body>
-    <center>
-        <h1>Please do not refresh this page...</h1>
-    </center>
-    <form method="post" action="https://securegw-stage.paytm.in/order/process" name="f1"><input type='hidden' name='MID'
-            value='mFqCiP95310391184453'><input type='hidden' name='WEBSITE' value='WEBSTAGING'><input type='hidden'
-            name='CHANNEL_ID' value='WEB'><input type='hidden' name='INDUSTRY_TYPE_ID' value='Retail'><input
-            type='hidden' name='ORDER_ID' value='ORDER_111'><input type='hidden' name='CUST_ID' value='${ORDER_DATA["custID"]}'><input
-            type='hidden' name='TXN_AMOUNT' value='${widget.amount}'><input type='hidden' name='CALLBACK_URL'
-            value='$PAYMENT_URL'><input type='hidden' name='EMAIL'
-            value='${ORDER_DATA["custEmail"]}'><input type='hidden' name='MOBILE_NO' value='${ORDER_DATA["custPhone"]}'><input type='hidden'
-            name='CHECKSUMHASH'
-            value='2+F8djikxv+kpQgL3YYUUmdXAF4nsyAJoBisxnbZWUAr+JOPd8IhP2oPmIMJgHLWvgItZzVTgpc0cGcwF7dZP9Cf4E8tV+vlrbPTYRmj/gg='>
-    </form>
-    <script type="text/javascript">document.f1.submit();</script>
-</body>
-</html>
-''';
-// <ul>
-// <ul><a href="https://www.youtube.com/">https://www.youtube.com/</a></ul>
-// <ul><a href="https://www.google.com/">https://www.google.com/</a></ul>
-// </ul>
-    //  "<input type='hidden' name='custID' value='${ORDER_DATA["custID"]}'/>"+
-    //  "<input type='hidden' name='amount' value='${widget.amount}'/>"+
-    //  "<input type='hidden' name='custEmail' value='${ORDER_DATA["custEmail"]}'/>"+
-    //  "<input type='hidden' name='custPhone' value='${ORDER_DATA["custPhone"]}'/>";
+    return "<html><head><title>Merchant Checkout Page</title></head>" +
+        "<body><center><h1>Please do not refresh this page...</h1>" +
+        "</center>" +
+        "<form method='get' action='https://securegw-stage.paytm.in/order/process' name='f1'>" +
+        "<input type='hidden' name='MID' value='mFqCiP95310391184453' >" +
+        "<input type='hidden' name='WEBSITE' value='WEBSTAGING' >" +
+        "<input type='hidden' name='CHANNEL_ID' value='WEB' >" +
+        "<input type='hidden' name='INDUSTRY_TYPE_ID' value='Retail' >" +
+        "<input type='hidden' name='ORDER_ID' value='ORDER_111' >" +
+        "<input type='hidden' name='CUST_ID' value='Cust_111' >" +
+        "<input type='hidden' name='TXN_AMOUNT' value='111' >" +
+        "<input type='hidden' name='CALLBACK_URL' value='http://10.0.2.2:5000/connect-59a1f/us-central1/customFunctions/payment' >" +
+        "<input type='hidden' name='EMAIL' value='Cust_111@gmail.com' ><input type='hidden' name='MOBILE_NO' value='1111111111' >" +
+        "<input type='hidden' name='CHECKSUMHASH' value='qqPKF6e8TwE9Bb4cSogV0FFuQggCUJxTVgaR9wZGEdEdPURe3kefAFsk3CxSKqOjmpd72i9CejA4dTMK6jewelepD8E23njeddotGQALj10=' ></form>" +
+        "<script type='text/javascript'>" +
+        "document.f1.submit();" +
+        "</script></body></html>";
   }
 
   void dispose() {

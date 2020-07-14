@@ -8,16 +8,16 @@ TextStyle mainTitle = new TextStyle(
     color: lightWhite,
     letterSpacing: -1.0,
     wordSpacing: 3.0);
-    
-    TextStyle cardTitleService = new TextStyle(
+
+TextStyle cardTitleService = new TextStyle(
     fontFamily: "Open Sans",
     fontSize: 22,
     fontWeight: FontWeight.w700,
     color: serviceColor,
     letterSpacing: -1.0,
-    wordSpacing: 3.0);    
-    
-    TextStyle bodyHeadline1 = new TextStyle(
+    wordSpacing: 3.0);
+
+TextStyle bodyHeadline1 = new TextStyle(
     fontFamily: "Open Sans",
     fontSize: 22,
     fontWeight: FontWeight.w700,
@@ -25,14 +25,13 @@ TextStyle mainTitle = new TextStyle(
     letterSpacing: -1.0,
     wordSpacing: 3.0);
 
-    TextStyle cardTitleAccesories = new TextStyle(
+TextStyle cardTitleAccesories = new TextStyle(
     fontFamily: "Open Sans",
     fontSize: 22,
     fontWeight: FontWeight.w700,
     color: accesoriesColor,
     letterSpacing: -1.0,
     wordSpacing: 3.0);
-
 
 TextStyle subTitle = new TextStyle(
     fontFamily: "Avenir",
@@ -63,7 +62,6 @@ TextStyle darkFont = new TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w900,
     color: lightGray);
-
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,

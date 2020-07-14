@@ -6,7 +6,7 @@ import 'package:googleapis/people/v1.dart'
     show ListConnectionsResponse, PeopleApi;
 import 'package:google_sign_in/google_sign_in.dart'
     show GoogleSignIn, GoogleSignInAccount, GoogleSignInAuthentication;
-    
+
 class AuthService {
   final Future<bool> smsCodeDialog;
   AuthService({this.smsCodeDialog});
@@ -16,11 +16,13 @@ class AuthService {
   String verificationId;
 
   User _userFromFirebaseUser(FirebaseUser user) {
-  //  if(user != null){
-  //   UserDetail.email = user.email;
-  //   UserDetail.mob = user.phoneNumber;
-  //  }
-    return user != null ? User(uid: user.uid,email: user.email,number: user.phoneNumber) : null;
+    //  if(user != null){
+    //   UserDetail.email = user.email;
+    //   UserDetail.mob = user.phoneNumber;
+    //  }
+    return user != null
+        ? User(uid: user.uid, email: user.email, number: user.phoneNumber)
+        : null;
   }
 
   Stream<User> get user {
@@ -65,7 +67,8 @@ class AuthService {
   }
 
   Future signInWithGoogle() async {
-    scopes:[''];
+    scopes:
+    [''];
     try {
       GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
@@ -87,7 +90,7 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInWithCredential(authCredential);
       FirebaseUser uuser = result.user;
-      
+
       return _userFromFirebaseUser(uuser);
     } catch (e) {
       print(e.toString());
@@ -130,6 +133,7 @@ class AuthService {
         codeAutoRetrievalTimeout: null);
   }
 }
+
 class UserDetails {
   final String providerDetails;
   final String userName;
@@ -137,9 +141,9 @@ class UserDetails {
   final String userEmail;
   final List<ProviderDetails> providerData;
 
-  UserDetails(this.providerDetails,this.userName, this.photoUrl,this.userEmail, this.providerData);
+  UserDetails(this.providerDetails, this.userName, this.photoUrl,
+      this.userEmail, this.providerData);
 }
-
 
 class ProviderDetails {
   ProviderDetails(this.providerDetails);
